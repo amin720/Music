@@ -16,10 +16,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var album = await db.Albums.SingleOrDefaultAsync(p => p.Id == id);
 
-				if (album == null)
-				{
-					throw new KeyNotFoundException("The Album Id \"" + id + "\" does not exist.");
-				}
+				//if (album == null)
+				//{
+				//	throw new KeyNotFoundException("The Album Id \"" + id + "\" does not exist.");
+				//}
 
 				return album;
 			}
@@ -30,10 +30,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var album = await db.Albums.SingleOrDefaultAsync(p => p.Name == name);
 
-				if (album == null)
-				{
-					throw new KeyNotFoundException("The Album name \"" + name + "\" does not exist.");
-				}
+				//if (album == null)
+				//{
+				//	throw new KeyNotFoundException("The Album name \"" + name + "\" does not exist.");
+				//}
 
 				return album;
 			}

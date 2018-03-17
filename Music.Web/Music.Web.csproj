@@ -723,6 +723,8 @@
     <Content Include="Areas\Admin\Views\Admin\Login.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\RecoveryPassword.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\_menuLink.cshtml" />
+    <Content Include="Areas\Admin\Views\Music\Genre.cshtml" />
+    <Content Include="Areas\Admin\Views\Music\Band.cshtml" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -734,8 +736,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Music\" />
     <Folder Include="Controllers\" />
+    <Folder Include="DownloadCenter\AlbumType\" />
+    <Folder Include="DownloadCenter\Album\" />
+    <Folder Include="DownloadCenter\Band\" />
+    <Folder Include="DownloadCenter\File\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -16,10 +16,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var genre = await db.Genres.SingleOrDefaultAsync(p => p.Id == id);
 
-				if (genre == null)
-				{
-					throw new KeyNotFoundException("The Genre Id \"" + id + "\" does not exist.");
-				}
+				//if (genre == null)
+				//{
+				//	throw new KeyNotFoundException("The Genre Id \"" + id + "\" does not exist.");
+				//}
 
 				return genre;
 			}
@@ -30,10 +30,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var genre = await db.Genres.SingleOrDefaultAsync(p => p.Name == name);
 
-				if (genre == null)
-				{
-					throw new KeyNotFoundException("The Genre name \"" + name + "\" does not exist.");
-				}
+				//if (genre == null)
+				//{
+				//	throw new KeyNotFoundException("The Genre name \"" + name + "\" does not exist.");
+				//}
 
 				return genre;
 			}

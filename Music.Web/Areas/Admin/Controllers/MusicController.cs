@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -47,7 +48,12 @@ namespace Music.Web.Areas.Admin.Controllers
 		[Authorize(Roles = "admin, editor")]
 		public async Task<ActionResult> Genre(string genreName)
 		{
-			var genre = await _genreRepository.GetByNameAsync(genreName);
+			var genre = new Genre();
+			if (!string.IsNullOrEmpty(genreName))
+			{
+				genre = await _genreRepository.GetByNameAsync(genreName);
+			}
+
 			var model = new MusicViewModel();
 
 			if (genre != null)
@@ -91,8 +97,9 @@ namespace Music.Web.Areas.Admin.Controllers
 						{
 							Name = genre.GenreOldName,
 						});
+						model.Genres = await _genreRepository.GetAllyAsync();
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
-						return View();
+						return View(model);
 					}
 					else
 					{
@@ -100,16 +107,140 @@ namespace Music.Web.Areas.Admin.Controllers
 
 						await _genreRepository.EditAsync(genreModel.Id, genreModel);
 					}
-					model.GenreOldName = genreModel.Name;
+					
 				}
 				else
 				{
 					await _genreRepository.DeleteAsync(genreModel.Id);
 				}
-				
+
+				model.Genres = await _genreRepository.GetAllyAsync();
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
-				return View();
+				return View(model);
+			}
+			catch (Exception e)
+			{
+				ModelState.AddModelError(string.Empty, e.Message);
+				return View(model: model);
+			}
+		}
+
+		// GET: Admin/Music/Band
+		[HttpGet]
+		[Authorize(Roles = "admin, editor")]
+		public async Task<ActionResult> Band(string bandName)
+		{
+			var band = new Band();
+
+			if (!string.IsNullOrEmpty(bandName))
+			{
+				band = await _bandRepository.GetByNameAsync(bandName);
+			}
+			
+			var model = new MusicViewModel();
+
+			if (band != null)
+			{
+				model.BandOldName = band.Name;
+				model.Bands = await _bandRepository.GetAllyAsync();
+				model.Genres = await _genreRepository.GetAllyAsync();
+			}
+			else
+			{
+				model.Genres = await _genreRepository.GetAllyAsync();
+				model.Bands = await _bandRepository.GetAllyAsync();
+			}
+
+			return View(model);
+		}
+
+		// Post: Admin/Music/Band
+		[HttpPost]
+		[Authorize(Roles = "admin, editor")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Band(MusicViewModel band, HttpPostedFileBase file)
+		{
+			var model = new MusicViewModel
+			{
+				Bands = await _bandRepository.GetAllyAsync(),
+				Genres = await _genreRepository.GetAllyAsync()
+			};
+			var bandCheck = new Band();
+			var allowedExtensions = new[] {
+				".Jpg", ".png", ".jpg", "jpeg"
+			};
+			var genre = await _genreRepository.GetByIdAsync(band.GenreId);
+
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "لطفا مقدار های مناسب پر کنید");
+				}
+				if (string.IsNullOrEmpty(band.GenreOldName))
+				{
+					band.BandOldName = band.BandNewName;
+				}
+
+				bandCheck = await _bandRepository.GetByNameAsync(band.BandOldName);
+
+				if (band.ActionType == "create" || band.ActionType == "edit")
+				{
+					if (bandCheck == null)
+					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + band.BandNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/Band"), myfile);
+								band.BandImage = "~/DownloadCenter/Band/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+
+						var bandmodel = new Band
+						{
+							Name = band.BandOldName,
+							Description = band.BandDescption,
+							ImageUrl = band.BandImage
+						};
+						bandmodel.Genres.Add(genre);
+
+						await _bandRepository.CreateAsync(bandmodel);
+
+						model.Bands = await _bandRepository.GetAllyAsync();
+
+						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
+						return View(model);
+					}
+					else
+					{
+						bandCheck.Name = (band.BandOldName == band.BandNewName ? band.BandOldName : band.BandNewName);
+						bandCheck.Description = band.BandDescption;
+						bandCheck.ImageUrl = band.BandImage;
+						bandCheck.Genres.Add(genre);
+
+						await _bandRepository.EditAsync(bandCheck.Id, bandCheck);
+					}
+				}
+				else
+				{
+					await _bandRepository.DeleteAsync(bandCheck.Id);
+				}
+
+				model.Bands = await _bandRepository.GetAllyAsync();
+
+				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
+				return View(model);
 			}
 			catch (Exception e)
 			{

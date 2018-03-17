@@ -17,10 +17,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var band = await db.Bands.SingleOrDefaultAsync(p => p.Id == id);
 
-				if (band == null)
-				{
-					throw new KeyNotFoundException("The Band Id \"" + id + "\" does not exist.");
-				}
+				//if (band == null)
+				//{
+				//	throw new KeyNotFoundException("The Band Id \"" + id + "\" does not exist.");
+				//}
 
 				return band;
 			}
@@ -31,10 +31,10 @@ namespace Music.Infrastructure.Repository
 			{
 				var band = await db.Bands.SingleOrDefaultAsync(p => p.Name == name);
 
-				if (band == null)
-				{
-					throw new KeyNotFoundException("The Band name \"" + name + "\" does not exist.");
-				}
+				//if (band == null)
+				//{
+				//	throw new KeyNotFoundException("The Band name \"" + name + "\" does not exist.");
+				//}
 
 				return band;
 			}
@@ -60,7 +60,7 @@ namespace Music.Infrastructure.Repository
 				{
 					throw new ArgumentException("A band with the id of " + model.Id + " already exsits.");
 				}
-
+				
 				db.Bands.Add(model);
 				await db.SaveChangesAsync();
 			}
