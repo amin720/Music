@@ -107,7 +107,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 						await _genreRepository.EditAsync(genreModel.Id, genreModel);
 					}
-					
+
 				}
 				else
 				{
@@ -126,6 +126,8 @@ namespace Music.Web.Areas.Admin.Controllers
 			}
 		}
 
+
+
 		// GET: Admin/Music/Band
 		[HttpGet]
 		[Authorize(Roles = "admin, editor")]
@@ -137,12 +139,15 @@ namespace Music.Web.Areas.Admin.Controllers
 			{
 				band = await _bandRepository.GetByNameAsync(bandName);
 			}
-			
+
 			var model = new MusicViewModel();
 
 			if (band != null)
 			{
 				model.BandOldName = band.Name;
+				model.BandDescption = band.Description;
+				model.BandImage = band.ImageUrl;
+
 				model.Bands = await _bandRepository.GetAllyAsync();
 				model.Genres = await _genreRepository.GetAllyAsync();
 			}
@@ -249,6 +254,261 @@ namespace Music.Web.Areas.Admin.Controllers
 			}
 		}
 
+
+
+		// GET: Admin/Music/AlbumType
+		[HttpGet]
+		[Authorize(Roles = "admin, editor")]
+		public async Task<ActionResult> AlbumType(string albumTypeName)
+		{
+			var albumType = new AlbumType();
+
+			if (!string.IsNullOrEmpty(albumTypeName))
+			{
+				albumType = await _albumTypeRepository.GetByNameAsync(albumTypeName);
+			}
+
+			var model = new MusicViewModel();
+
+			if (albumType != null)
+			{
+				model.AlbumOldName = albumType.Name;
+				model.AlbumDescption = albumType.Description;
+				model.AlbumImage = albumType.ImageUrl;
+
+				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+				model.Bands = await _bandRepository.GetAllyAsync();
+			}
+			else
+			{
+				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+				model.Bands = await _bandRepository.GetAllyAsync();
+			}
+
+			return View(model);
+		}
+
+		// Post: Admin/Music/AlbumType
+		[HttpPost]
+		[Authorize(Roles = "admin, editor")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> AlbumType(MusicViewModel albumType, HttpPostedFileBase file)
+		{
+			var model = new MusicViewModel
+			{
+				AlbumTypes = await _albumTypeRepository.GetAllyAsync(),
+				Bands = await _bandRepository.GetAllyAsync()
+			};
+			var albumTypeCheck = new AlbumType();
+			var allowedExtensions = new[] {
+				".Jpg", ".png", ".jpg", "jpeg"
+			};
+
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "لطفا مقدار های مناسب پر کنید");
+				}
+				if (string.IsNullOrEmpty(albumType.AlbumTypeOldName))
+				{
+					albumType.AlbumTypeOldName = albumType.AlbumTypeNewName;
+				}
+
+				albumTypeCheck = await _albumTypeRepository.GetByNameAsync(albumType.AlbumTypeOldName);
+
+				if (albumType.ActionType == "create" || albumType.ActionType == "edit")
+				{
+					if (albumTypeCheck == null)
+					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + albumType.AlbumTypeNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/AlbumType"), myfile);
+								albumType.AlbumTypeImage = "~/DownloadCenter/AlbumType/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+
+						var AlbumTypemodel = new AlbumType
+						{
+							Name = albumType.AlbumTypeOldName,
+							Description = albumType.AlbumTypeDescption,
+							ImageUrl = albumType.AlbumTypeImage,
+							BandId = albumType.BandId
+						};
+
+
+						await _albumTypeRepository.CreateAsync(AlbumTypemodel);
+
+						model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+
+						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
+						return View(model);
+					}
+					else
+					{
+						albumTypeCheck.Name = (albumType.AlbumTypeOldName == albumType.AlbumTypeNewName ? albumType.AlbumTypeOldName : albumType.AlbumTypeNewName);
+						albumTypeCheck.Description = albumType.AlbumTypeDescption;
+						albumTypeCheck.ImageUrl = albumType.AlbumTypeImage;
+						albumTypeCheck.BandId = albumType.BandId;
+
+						await _albumTypeRepository.EditAsync(albumTypeCheck.Id, albumTypeCheck);
+					}
+				}
+				else
+				{
+					await _albumTypeRepository.DeleteAsync(albumTypeCheck.Id);
+				}
+
+				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+
+				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
+				return View(model);
+			}
+			catch (Exception e)
+			{
+				ModelState.AddModelError(string.Empty, e.Message);
+				return View(model: model);
+			}
+		}
+
+
+
+		// GET: Admin/Music/Album
+		[HttpGet]
+		[Authorize(Roles = "admin, editor")]
+		public async Task<ActionResult> Album(string albumName)
+		{
+			var album = new Album();
+
+			if (!string.IsNullOrEmpty(albumName))
+			{
+				album = await _albumRepository.GetByNameAsync(albumName);
+			}
+
+			var model = new MusicViewModel();
+
+			if (album != null)
+			{
+				model.AlbumOldName = album.Name;
+				model.AlbumDescption = album.Description;
+				model.AlbumImage = album.ImageUrl;
+
+				model.Albums = await _albumRepository.GetAllyAsync();
+				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+			}
+			else
+			{
+				model.Albums = await _albumRepository.GetAllyAsync();
+				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+			}
+
+			return View(model);
+		}
+
+		// Post: Admin/Music/Album
+		[HttpPost]
+		[Authorize(Roles = "admin, editor")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Album(MusicViewModel album, HttpPostedFileBase file)
+		{
+			var model = new MusicViewModel
+			{
+				Albums = await _albumRepository.GetAllyAsync(),
+				AlbumTypes = await _albumTypeRepository.GetAllyAsync()
+			};
+			var albumCheck = new Album();
+			var allowedExtensions = new[] {
+				".Jpg", ".png", ".jpg", "jpeg"
+			};
+
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "لطفا مقدار های مناسب پر کنید");
+				}
+				if (string.IsNullOrEmpty(album.AlbumOldName))
+				{
+					album.AlbumOldName = album.AlbumNewName;
+				}
+
+				albumCheck = await _albumRepository.GetByNameAsync(album.AlbumOldName);
+
+				if (album.ActionType == "create" || album.ActionType == "edit")
+				{
+					if (albumCheck == null)
+					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + album.AlbumNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/Album"), myfile);
+								album.AlbumImage = "~/DownloadCenter/Album/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+
+						var albummodel = new Album
+						{
+							Name = album.AlbumOldName,
+							Description = album.AlbumDescption,
+							ImageUrl = album.AlbumImage,
+							AlbumTypeId = album.AlbumTypeId
+						};
+
+
+						await _albumRepository.CreateAsync(albummodel);
+
+						model.Albums = await _albumRepository.GetAllyAsync();
+
+						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
+						return View(model);
+					}
+					else
+					{
+						albumCheck.Name = (album.AlbumOldName == album.AlbumNewName ? album.AlbumOldName : album.AlbumNewName);
+						albumCheck.Description = album.AlbumDescption;
+						albumCheck.ImageUrl = album.AlbumImage;
+						albumCheck.AlbumTypeId = album.AlbumTypeId;
+
+						await _albumRepository.EditAsync(albumCheck.Id, albumCheck);
+					}
+				}
+				else
+				{
+					await _albumRepository.DeleteAsync(albumCheck.Id);
+				}
+
+				model.Albums = await _albumRepository.GetAllyAsync();
+
+				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
+				return View(model);
+			}
+			catch (Exception e)
+			{
+				ModelState.AddModelError(string.Empty, e.Message);
+				return View(model: model);
+			}
+		}
 
 		#region Method
 
