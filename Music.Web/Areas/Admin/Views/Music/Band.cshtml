@@ -96,7 +96,7 @@
                         <tr class="text-center">
                             <td class="text-center">@counter</td>
                             <td class="text-center" id="Name"><strong>@child.Name</strong></td>
-                            <td id="Id">@child.Id</td>
+                            <td id="Id"><a href="@Url.Action("AlbumType", "Music", new {albumTypeId = child.Id,albumName = child.Name})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
 
                             <td class="text-center">
                                 <a href="@Url.Action("Band", "Music", new {bandName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>

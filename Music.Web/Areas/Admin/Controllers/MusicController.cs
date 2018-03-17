@@ -259,7 +259,7 @@ namespace Music.Web.Areas.Admin.Controllers
 		// GET: Admin/Music/AlbumType
 		[HttpGet]
 		[Authorize(Roles = "admin, editor")]
-		public async Task<ActionResult> AlbumType(string albumTypeName)
+		public async Task<ActionResult> AlbumType(int bandId, string albumTypeName)
 		{
 			var albumType = new AlbumType();
 
@@ -275,6 +275,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				model.AlbumOldName = albumType.Name;
 				model.AlbumDescption = albumType.Description;
 				model.AlbumImage = albumType.ImageUrl;
+				model.BandId = bandId;
 
 				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
 				model.Bands = await _bandRepository.GetAllyAsync();
@@ -387,7 +388,7 @@ namespace Music.Web.Areas.Admin.Controllers
 		// GET: Admin/Music/Album
 		[HttpGet]
 		[Authorize(Roles = "admin, editor")]
-		public async Task<ActionResult> Album(string albumName)
+		public async Task<ActionResult> Album(int albumTypeId, string albumName)
 		{
 			var album = new Album();
 
@@ -403,6 +404,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				model.AlbumOldName = album.Name;
 				model.AlbumDescption = album.Description;
 				model.AlbumImage = album.ImageUrl;
+				model.AlbumTypeId = albumTypeId;
 
 				model.Albums = await _albumRepository.GetAllyAsync();
 				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
