@@ -1,8 +1,7 @@
 ﻿@model Music.Web.Areas.Admin.ViewModels.MusicViewModel
 @{
-    ViewBag.Title = "Band";
+    ViewBag.Title = "Album";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdminPage.cshtml";
-
     var counter = 1;
 }
 
@@ -12,15 +11,15 @@
     <div class=" block col-sm-3" style="margin-left: 35px; margin-right: 25px; min-height: 50%;">
         <!-- Input States Title -->
         <div class="block-title">
-            <h2>وارد کردن سبک موسیقی</h2>
+            <h2>وارد کردن آلبوم</h2>
         </div>
         <!-- END Input States Title -->
         <!-- Input States Content -->
-        @using (Html.BeginForm("Band", "Music", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("Album", "Music", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            if (string.IsNullOrEmpty(Model.BandOldName))
+            if (string.IsNullOrEmpty(Model.AlbumOldName))
             {
                 <input type="hidden" name="ActionType" value="create" />
             }
@@ -29,29 +28,37 @@
                 <input type="hidden" name="ActionType" value="edit" />
             }
 
-            <input type="hidden" name="BandOldName" value="@Model.BandOldName" />
+            <input type="hidden" name="AlbumOldName" value="@Model.AlbumOldName" />
+            <input type="hidden" name="AlbumTypeId" value="@Model.AlbumTypeId" />
 
             <div class="form-group">
                 <label class="col-md-3 control-label" for="Name">نام</label>
                 <div class="col-md-7">
-                    <input type="text" id="Name" name="BandNewName" class="form-control" placeholder="..." value="@Model.BandOldName">
+                    <input type="text" id="Name" name="AlbumNewName" class="form-control" placeholder="..." value="@Model.AlbumOldName">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label" for="Name">توضیحات</label>
                 <div class="col-md-7">
-                    <textarea name="BandDescption" rows="5">@Model.BandDescption</textarea>
+                    <textarea name="AlbumDescption" rows="5">@Model.AlbumDescption</textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label" for="GenreId">سبک موسیقی</label>
                 <div class="col-md-7">
-                    <select id="GenreId" name="GenreId" class="select-select2" style="width: 100%;" data-placeholder="یک انتخاب..">
+                    <select id="AlbumTypeId" name="AlbumTypeId" class="select-select2" style="width: 100%;" data-placeholder="یک انتخاب..">
                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                         <option value="@string.Empty">بدون انتخاب</option>
-                        @foreach (var parent in Model.Genres)
+                        @foreach (var parent in Model.Bands)
                         {
-                            <option value="@parent.Id">@parent.Name</option>
+                            if (parent.Id == Model.AlbumTypeId)
+                            {
+                                <option value="@parent.Id" selected>@parent.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@parent.Id">@parent.Name</option>
+                            }
                         }
                     </select>
                 </div>
@@ -86,25 +93,25 @@
                     <tr>
                         <th class="text-center" style="width: 50px;">شماره</th>
                         <th class="text-center">نام</th>
-                        <th class="text-center">ثبت نوع آلبوم</th>
+                        <th class="text-center">ثبت آهنگ</th>
                         <th class="text-center" style="width: 75px;"><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var child in Model.Bands)
+                    @foreach (var child in Model.Albums)
                     {
                         <tr class="text-center">
                             <td class="text-center">@counter</td>
                             <td class="text-center" id="Name"><strong>@child.Name</strong></td>
-                            <td id="Id"><a href="@Url.Action("AlbumType", "Music", new {bandId = child.Id})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
+                            <td id="Id"><a href="@Url.Action("File", "Music", new {fileId = child.Id})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
 
                             <td class="text-center">
-                                <a href="@Url.Action("Band", "Music", new {bandName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                                @using (Html.BeginForm("Band", "Music", FormMethod.Post))
+                                <a href="@Url.Action("Album", "Music", new {albumTypeId= Model.AlbumTypeId,albumName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                @using (Html.BeginForm("Album", "Music", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="ActionType" value="delete" />
-                                    <input type="hidden" name="BandOldName" value="@child.Name" />
+                                    <input type="hidden" name="AlbumOldName" value="@child.Name" />
                                     <button type="submit" data-toggle="tooltip" title="Delete User" class="btn btn-effect-ripple btn-xs btn-danger"><i class="fa fa-times"></i></button>
                                 }
                             </td>

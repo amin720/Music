@@ -1,6 +1,6 @@
 ﻿@model Music.Web.Areas.Admin.ViewModels.MusicViewModel
 @{
-    ViewBag.Title = "Band";
+    ViewBag.Title = "AlbumType";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdminPage.cshtml";
 
     var counter = 1;
@@ -12,15 +12,15 @@
     <div class=" block col-sm-3" style="margin-left: 35px; margin-right: 25px; min-height: 50%;">
         <!-- Input States Title -->
         <div class="block-title">
-            <h2>وارد کردن سبک موسیقی</h2>
+            <h2>وارد کردن نوع آلبوم</h2>
         </div>
         <!-- END Input States Title -->
         <!-- Input States Content -->
-        @using (Html.BeginForm("Band", "Music", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("AlbumType", "Music", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
 
-            if (string.IsNullOrEmpty(Model.BandOldName))
+            if (string.IsNullOrEmpty(Model.AlbumTypeOldName))
             {
                 <input type="hidden" name="ActionType" value="create" />
             }
@@ -29,29 +29,37 @@
                 <input type="hidden" name="ActionType" value="edit" />
             }
 
-            <input type="hidden" name="BandOldName" value="@Model.BandOldName" />
+            <input type="hidden" name="AlbumTypeOldName" value="@Model.AlbumTypeOldName" />
+            <input type="hidden" name="BandId" value="@Model.BandId" />
 
             <div class="form-group">
                 <label class="col-md-3 control-label" for="Name">نام</label>
                 <div class="col-md-7">
-                    <input type="text" id="Name" name="BandNewName" class="form-control" placeholder="..." value="@Model.BandOldName">
+                    <input type="text" id="Name" name="AlbumTypeNewName" class="form-control" placeholder="..." value="@Model.AlbumTypeOldName">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label" for="Name">توضیحات</label>
                 <div class="col-md-7">
-                    <textarea name="BandDescption" rows="5">@Model.BandDescption</textarea>
+                    <textarea name="AlbumTypeDescption" rows="5">@Model.AlbumTypeDescption</textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="GenreId">سبک موسیقی</label>
+                <label class="col-md-3 control-label" for="BandId">سبک موسیقی</label>
                 <div class="col-md-7">
-                    <select id="GenreId" name="GenreId" class="select-select2" style="width: 100%;" data-placeholder="یک انتخاب..">
+                    <select id="BandId" name="BandId" class="select-select2" style="width: 100%;" data-placeholder="یک انتخاب..">
                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
                         <option value="@string.Empty">بدون انتخاب</option>
-                        @foreach (var parent in Model.Genres)
+                        @foreach (var parent in Model.Bands)
                         {
-                            <option value="@parent.Id">@parent.Name</option>
+                            if (parent.Id == Model.BandId)
+                            {
+                                <option value="@parent.Id" selected>@parent.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@parent.Id">@parent.Name</option>
+                            }
                         }
                     </select>
                 </div>
@@ -78,7 +86,7 @@
     <!-- Datatables is initialized in js/pages/uiTables.js -->
     <div class="block full col-sm-8">
         <div class="block-title">
-            <h2>سبک موسیقی</h2>
+            <h2>نوع آلبوم</h2>
         </div>
         <div class="table-responsive" dir="ltr" id="tableElm">
             <table id="example-datatable" class="table table-striped table-bordered table-vcenter">
@@ -86,25 +94,25 @@
                     <tr>
                         <th class="text-center" style="width: 50px;">شماره</th>
                         <th class="text-center">نام</th>
-                        <th class="text-center">ثبت نوع آلبوم</th>
+                        <th class="text-center">ثبت آلبوم</th>
                         <th class="text-center" style="width: 75px;"><i class="fa fa-flash"></i></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var child in Model.Bands)
+                    @foreach (var child in Model.AlbumTypes)
                     {
                         <tr class="text-center">
                             <td class="text-center">@counter</td>
                             <td class="text-center" id="Name"><strong>@child.Name</strong></td>
-                            <td id="Id"><a href="@Url.Action("AlbumType", "Music", new {bandId = child.Id})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
+                            <td id="Id"><a href="@Url.Action("Album", "Music", new {albumTypeId = child.Id})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
 
                             <td class="text-center">
-                                <a href="@Url.Action("Band", "Music", new {bandName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                                @using (Html.BeginForm("Band", "Music", FormMethod.Post))
+                                <a href="@Url.Action("AlbumType", "Music", new {bandId = child.Id,albumTypeName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                @using (Html.BeginForm("AlbumType", "Music", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="ActionType" value="delete" />
-                                    <input type="hidden" name="BandOldName" value="@child.Name" />
+                                    <input type="hidden" name="AlbumTypeOldName" value="@child.Name" />
                                     <button type="submit" data-toggle="tooltip" title="Delete User" class="btn btn-effect-ripple btn-xs btn-danger"><i class="fa fa-times"></i></button>
                                 }
                             </td>

@@ -725,6 +725,8 @@
     <Content Include="Areas\Admin\Views\Admin\_menuLink.cshtml" />
     <Content Include="Areas\Admin\Views\Music\Genre.cshtml" />
     <Content Include="Areas\Admin\Views\Music\Band.cshtml" />
+    <Content Include="Areas\Admin\Views\Music\AlbumType.cshtml" />
+    <Content Include="Areas\Admin\Views\Music\Album.cshtml" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

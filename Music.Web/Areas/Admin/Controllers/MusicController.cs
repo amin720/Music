@@ -272,9 +272,9 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (albumType != null)
 			{
-				model.AlbumOldName = albumType.Name;
-				model.AlbumDescption = albumType.Description;
-				model.AlbumImage = albumType.ImageUrl;
+				model.AlbumTypeOldName = albumType.Name;
+				model.AlbumTypeDescption = albumType.Description;
+				model.AlbumTypeImage = albumType.ImageUrl;
 				model.BandId = bandId;
 
 				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
@@ -352,7 +352,7 @@ namespace Music.Web.Areas.Admin.Controllers
 						await _albumTypeRepository.CreateAsync(AlbumTypemodel);
 
 						model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
-
+						model.BandId = albumType.BandId;
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
 						return View(model);
 					}
@@ -372,6 +372,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				}
 
 				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+				model.BandId = albumType.BandId;
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
 				return View(model);
@@ -481,6 +482,7 @@ namespace Music.Web.Areas.Admin.Controllers
 						await _albumRepository.CreateAsync(albummodel);
 
 						model.Albums = await _albumRepository.GetAllyAsync();
+						model.AlbumTypeId = album.AlbumTypeId;
 
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
 						return View(model);
@@ -501,6 +503,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				}
 
 				model.Albums = await _albumRepository.GetAllyAsync();
+				model.AlbumTypeId = album.AlbumTypeId;
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
 				return View(model);
