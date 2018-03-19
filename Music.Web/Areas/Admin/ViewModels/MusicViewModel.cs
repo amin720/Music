@@ -36,7 +36,7 @@ namespace Music.Web.Areas.Admin.ViewModels
 		public string FileOldName { get; set; }
 		public string FileNewName { get; set; }
 		public string FileRoot { get; set; }
-		public int FileSize { get; set; }
+		public long? FileSize { get; set; }
 		public string FileType { get; set; }
 		public string FileDescption { get; set; }
 		public string FileImage { get; set; }

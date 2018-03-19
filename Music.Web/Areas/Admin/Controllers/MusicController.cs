@@ -515,6 +515,174 @@ namespace Music.Web.Areas.Admin.Controllers
 			}
 		}
 
+		// GET: Admin/Music/File
+		[HttpGet]
+		[Authorize(Roles = "admin, editor")]
+		public async Task<ActionResult> File(int albumId, string fileName)
+		{
+			var file = new Music.Core.Entities.File();
+
+			if (!string.IsNullOrEmpty(fileName))
+			{
+				file = await _fileRepository.GetByNameAsync(fileName);
+			}
+
+			var model = new MusicViewModel();
+
+			if (file != null)
+			{
+				model.FileOldName = file.FileName;
+				model.FileRoot = file.FileRoot;
+				model.FileSize = file.FileSize;
+				model.FileType = file.FileType;
+				model.FileDescption = file.Description;
+				model.FileImage = file.ImageUrl;
+				model.AlbumId = albumId;
+
+				model.Files = await _fileRepository.GetAllyAsync();
+				model.Albums = await _albumRepository.GetAllyAsync();
+			}
+			else
+			{
+				model.Files = await _fileRepository.GetAllyAsync();
+				model.Albums = await _albumRepository.GetAllyAsync();
+			}
+
+			return View(model);
+		}
+
+		// Post: Admin/Music/File
+		[HttpPost]
+		[Authorize(Roles = "admin, editor")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> File(MusicViewModel file, HttpPostedFileBase image, HttpPostedFileBase music)
+		{
+			var model = new MusicViewModel
+			{
+				Files = await _fileRepository.GetAllyAsync(),
+				Albums = await _albumRepository.GetAllyAsync()
+			};
+			var fileCheck = new Music.Core.Entities.File();
+			var allowedExtensionsImage = new[] {
+				".Jpg", ".png", ".jpg", "jpeg"
+			};
+			var allowedExtensionsMusic = new[] {
+				".mp3", ".MP3"
+			};
+
+			var user = await GetloggedInUser();
+
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "لطفا مقدار های مناسب پر کنید");
+				}
+				if (string.IsNullOrEmpty(file.FileOldName))
+				{
+					file.FileOldName = file.FileNewName;
+				}
+
+				fileCheck = await _fileRepository.GetByNameAsync(file.FileOldName);
+
+				if (file.ActionType == "create" || file.ActionType == "edit")
+				{
+					if (fileCheck == null)
+					{
+						if (image != null)
+						{
+							var fileName = Path.GetFileName(image.FileName);
+							var ext = Path.GetExtension(image.FileName);
+							if (allowedExtensionsImage.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + file.FileNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/File"), myfile);
+								file.FileImage = "~/DownloadCenter/File/" + myfile;
+								file.FileType = ext;
+								file.FileSize = music.ContentLength;
+								image.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+						if (music != null)
+						{
+							var fileName = Path.GetFileName(music.FileName);
+							var ext = Path.GetExtension(music.FileName);
+							if (allowedExtensionsMusic.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + file.FileNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/File"), myfile);
+								file.FileRoot = "~/DownloadCenter/File/" + myfile;
+								file.FileType = ext;
+								file.FileSize = music.ContentLength;
+								
+								music.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Music file");
+							}
+						}
+						var filemodel = new Music.Core.Entities.File
+						{
+							FileName = file.FileNewName,
+							FileRoot = file.FileRoot,
+							FilePath = file.FileRoot,
+							FileType = file.FileType,
+							FileSize = file.FileSize,
+							Description = file.FileDescption,
+							ImageUrl = file.FileImage,
+							AlbumId = file.AlbumId,
+							AuthorId = user.Id
+						};
+
+
+						await _fileRepository.CreateAsync(filemodel);
+
+						model.Files = await _fileRepository.GetAllyAsync();
+						model.AlbumId = file.AlbumId;
+
+						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
+						return View(model);
+					}
+					else
+					{
+						fileCheck.FileName = (file.FileOldName == file.FileNewName ? file.FileOldName : file.FileNewName);
+						fileCheck.FileRoot = file.FileRoot;
+						fileCheck.FilePath = file.FileRoot;
+						fileCheck.FileType = file.FileType;
+						fileCheck.FileSize= file.FileSize;
+						fileCheck.Description = file.FileDescption;
+						fileCheck.ImageUrl = file.FileImage;
+						fileCheck.AlbumId = file.AlbumId;
+						fileCheck.AuthorId = user.Id;
+
+						await _fileRepository.EditAsync(fileCheck.Id, fileCheck);
+					}
+				}
+				else
+				{
+					await _fileRepository.DeleteAsync(fileCheck.Id);
+				}
+
+				model.Files = await _fileRepository.GetAllyAsync();
+				model.AlbumId = file.AlbumId;
+
+				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
+				return View(model);
+			}
+			catch (Exception e)
+			{
+				ModelState.AddModelError(string.Empty, e.Message);
+				return View(model: model);
+			}
+		}
+
 		#region Method
 
 		private bool _isDisposed;
