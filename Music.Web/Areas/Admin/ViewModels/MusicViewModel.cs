@@ -33,6 +33,7 @@ namespace Music.Web.Areas.Admin.ViewModels
 		public int AlbumTypeId { get; set; }
 		public IEnumerable<Album> Albums { get; set; }
 
+		public long Price { get; set; }
 		public string FileOldName { get; set; }
 		public string FileNewName { get; set; }
 		public string FileRoot { get; set; }

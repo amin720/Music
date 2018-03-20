@@ -75,6 +75,7 @@ namespace Music.Infrastructure.Repository
 					throw new KeyNotFoundException("A file withthe id of " + id + "does not exisst in the data store");
 				}
 
+				file.Price = updateItem.Price;
 				file.FileName = updateItem.FileName;
 				file.FilePath = updateItem.FilePath;
 				file.FileRoot = updateItem.FileRoot;

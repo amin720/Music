@@ -552,9 +552,10 @@ header .social_icons a:hover {
 	padding-top: 15px !important;
 }
 .latest-release {
-	background: url(../images/latest-relase.jpg) center center no-repeat;
-	padding: 80px 0;
-	background-size: cover;
+    /*background: url(../images/latest-relase.jpg) center center no-repeat;*/
+    background: url(../images/2992095-music-disk-macro-gramophone-vinyl___mixed-wallpapers.jpg);
+    padding: 80px 0;
+    background-size: cover;
 }
 .latest-release article {
 	position: relative;
@@ -1695,11 +1696,12 @@ iframe {
       SUB BANNER
 ========================================================*/
 .sub-bnr {
-	background: url(../images/sub-bnr.jpg) center center no-repeat;
-	background-size: cover !important;
-	min-height: 400px;
-	text-align: center;
-	position: relative;
+    /*background: url(../images/sub-bnr.jpg) center center no-repeat;*/
+    background: url(../images/2992095-music-disk-macro-gramophone-vinyl___mixed-wallpapers.jpg) center center no-repeat;
+    background-size: cover !important;
+    min-height: 400px;
+    text-align: center;
+    position: relative;
 }
 .sub-bnr h2 {
 	color: #fff;
@@ -1860,8 +1862,9 @@ iframe {
       DARK LAYOUT
 ========================================================*/
 .dark-layout .main-bnr {
-	background: url(../images/header-bg-dark.jpg) center center no-repeat;
-	background-size: cover;
+    /*background: url(../images/header-bg-dark.jpg) center center no-repeat;*/
+    background: url(../images/e8c0fee508931f8f0a35d63d3db2512d.jpg) center center no-repeat;
+    background-size: cover;
 }
 .dark-layout header .navbar li a {
 	color: #fff;

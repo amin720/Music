@@ -32,7 +32,7 @@ namespace Music.Core.Entities
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Band> Bands { get; set; }
-        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<File> Files { get; set; }
     }
 }

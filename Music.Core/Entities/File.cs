@@ -15,6 +15,7 @@ namespace Music.Core.Entities
     public partial class File
     {
         public int Id { get; set; }
+        public Nullable<double> Price { get; set; }
         public string FileName { get; set; }
         public Nullable<long> FileSize { get; set; }
         public string FileType { get; set; }

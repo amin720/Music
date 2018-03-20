@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = " گروه موسیقی" + ViewBag.GenreName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- MAIN BANNER -->
+<section class="sub-bnr">
+    <div class="position-center-center">
+        <div class="container">
+            <h2>گروه موسیقی @ViewBag.GenreName</h2>
+            @*<ul class="breadcrumb">
+                <li><a href="#">Home </a></li>
+                <li><a href="#">Search </a></li>
+                <li class="active">Discover</li>
+            </ul>*@
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="portfolio port-wrap discover-music padding-top-80 padding-bottom-80 about-page">
+    <div class="container">
+
+        <!-- Work Filter -->
+        @*<ul class="tabs media-filter">
+            <li><a class="active" href="#." data-filter="*">All</a></li>
+            <li><a href="#." data-filter=".multi">Multimedia</a></li>
+            <li><a href="#." data-filter=".audio">Music</a></li>
+            <li><a href="#." data-filter=".images">Video</a></li>
+            <li><a href="#." data-filter=".lyrics">Lyrics</a></li>
+            <li><a href="#." data-filter=".gal">Gallery</a></li>
+        </ul>*@
+
+        <!-- PORTFOLIO ITEMS -->
+        <div class="items row col-4">
+            
+            @foreach (var item in ViewBag.ListBands)
+            {
+                <!-- MEDIA -->
+                <article class="media-item">
+                    @if (item.ImageUrl == null)
+                    {
+                        <div class="media-image">
+                             <a href="#."> <img alt="" src="~/Library/images/media-img-1.jpg"> </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="media-image">
+                            <a href="#."> <img alt="" src="@Url.Content(item.ImageUrl)" height="263px" width="220px"> </a>
+                        </div>
+                    }
+                    
+                    <div class="media-overlay">
+                        <div class="tag"><i class="fa fa-music"></i>
+                        </div>
+                        <div class="position-center-center"> <a href="#." class="view-detail">مشاهده</a>
+                        </div>
+                    </div>
+                    <!-- Item Name -->
+                    <div class="item-name">
+                        @*<span>By: Alexa Niall</span>
+                        <h6>Somewhere Out There</h6>*@
+                        <h6>@item.Name</h6>
+                    </div>
+                </article>
+            }
+
+        </div>
+    </div>
+</section>
+

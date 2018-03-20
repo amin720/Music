@@ -623,6 +623,7 @@
     <Content Include="Areas\Admin\Scripts\js\vendor\jquery-2.2.4.min.js" />
     <Content Include="Areas\Admin\Scripts\js\vendor\modernizr-3.3.1.min.js" />
     <Content Include="Global.asax" />
+    <Content Include="Library\images\2992095-music-disk-macro-gramophone-vinyl___mixed-wallpapers.jpg" />
     <Content Include="Library\images\37.jpg" />
     <Content Include="Library\css\animate.css" />
     <Content Include="Library\css\bootstrap.min.css" />
@@ -661,6 +662,7 @@
     <Content Include="Library\images\dis-img-6.jpg" />
     <Content Include="Library\images\dis-img-7.jpg" />
     <Content Include="Library\images\discover-bg.jpg" />
+    <Content Include="Library\images\e8c0fee508931f8f0a35d63d3db2512d.jpg" />
     <Content Include="Library\images\gallery-img-1.jpg" />
     <Content Include="Library\images\gallery-img-2.jpg" />
     <Content Include="Library\images\gallery-img-3.jpg" />
@@ -714,6 +716,7 @@
     <Content Include="Library\images\relase-img-5.jpg" />
     <Content Include="Library\images\sub-bnr.jpg" />
     <Content Include="Library\images\video-img.jpg" />
+    <Content Include="Library\images\wallpaper-1499989.jpg" />
     <Content Include="Library\js\bootstrap.min.js" />
     <Content Include="Library\js\jquery-1.11.3.min.js" />
     <Content Include="Library\js\jquery.colio.min.js" />
@@ -752,6 +755,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Extensions.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -875,6 +879,8 @@
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Bands.cshtml" />
+    <Content Include="Views\Home\Profile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

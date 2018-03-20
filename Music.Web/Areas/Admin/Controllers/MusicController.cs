@@ -531,6 +531,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (file != null)
 			{
+				model.Price = (long)file.Price;
 				model.FileOldName = file.FileName;
 				model.FileRoot = file.FileRoot;
 				model.FileSize = file.FileSize;
@@ -620,7 +621,7 @@ namespace Music.Web.Areas.Admin.Controllers
 								file.FileRoot = "~/DownloadCenter/File/" + myfile;
 								file.FileType = ext;
 								file.FileSize = music.ContentLength;
-								
+
 								music.SaveAs(path);
 							}
 							else
@@ -630,6 +631,7 @@ namespace Music.Web.Areas.Admin.Controllers
 						}
 						var filemodel = new Music.Core.Entities.File
 						{
+							Price = file.Price,
 							FileName = file.FileNewName,
 							FileRoot = file.FileRoot,
 							FilePath = file.FileRoot,
@@ -652,11 +654,12 @@ namespace Music.Web.Areas.Admin.Controllers
 					}
 					else
 					{
+						fileCheck.Price = file.Price;
 						fileCheck.FileName = (file.FileOldName == file.FileNewName ? file.FileOldName : file.FileNewName);
 						fileCheck.FileRoot = file.FileRoot;
 						fileCheck.FilePath = file.FileRoot;
 						fileCheck.FileType = file.FileType;
-						fileCheck.FileSize= file.FileSize;
+						fileCheck.FileSize = file.FileSize;
 						fileCheck.Description = file.FileDescption;
 						fileCheck.ImageUrl = file.FileImage;
 						fileCheck.AlbumId = file.AlbumId;

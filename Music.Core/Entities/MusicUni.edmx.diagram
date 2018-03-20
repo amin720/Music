@@ -12,16 +12,16 @@
         <EntityTypeShape EntityType="MusicUniModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MusicUniModel.AspNetUser" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MusicUniModel.Band" Width="1.5" PointX="1.5" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MusicUniModel.File" Width="1.5" PointX="8.25" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="MusicUniModel.Genre" Width="1.5" PointX="3.75" PointY="10.375" IsExpanded="true" />
         <AssociationConnector Association="MusicUniModel.FK_Album_AlbumType" ManuallyRouted="false" />
-        <AssociationConnector Association="MusicUniModel.FK_File_Album" ManuallyRouted="false" />
         <AssociationConnector Association="MusicUniModel.FK_AlbumType_Band" ManuallyRouted="false" />
         <AssociationConnector Association="MusicUniModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="MusicUniModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="MusicUniModel.FK_File_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="MusicUniModel.AspNetUserRoles" ManuallyRouted="false" />
         <AssociationConnector Association="MusicUniModel.GenreBand" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MusicUniModel.File" Width="1.5" PointX="8.25" PointY="3.125" />
+        <AssociationConnector Association="MusicUniModel.FK_File_Album" />
+        <AssociationConnector Association="MusicUniModel.FK_File_AspNetUsers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

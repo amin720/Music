@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MusicUniModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MusicUniModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Album">
           <Key>
             <PropertyRef Name="Id" />
@@ -91,6 +91,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Price" Type="float" />
           <Property Name="FileName" Type="nvarchar" MaxLength="90" Nullable="false" />
           <Property Name="FileSize" Type="bigint" />
           <Property Name="FileType" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -297,8 +298,7 @@
             <End Role="GenreBand" EntitySet="GenreBand" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MusicUniModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -312,7 +312,7 @@
           <Property Name="ImageUrl" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <Property Name="AlbumTypeId" Type="Int32" />
           <NavigationProperty Name="AlbumType" Relationship="Self.FK_Album_AlbumType" FromRole="Album" ToRole="AlbumType" />
-          <NavigationProperty Name="Files" Relationship="Self.FK_File_Album" FromRole="Album" ToRole="File" />
+          <NavigationProperty Name="Files" Relationship="MusicUniModel.FK_File_Album" FromRole="Album" ToRole="File" />
         </EntityType>
         <EntityType Name="AlbumType">
           <Key>
@@ -374,8 +374,8 @@
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="Files" Relationship="Self.FK_File_AspNetUsers" FromRole="AspNetUsers" ToRole="File" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <NavigationProperty Name="Files" Relationship="MusicUniModel.FK_File_AspNetUsers" FromRole="AspNetUser" ToRole="File" />
         </EntityType>
         <EntityType Name="Band">
           <Key>
@@ -387,23 +387,6 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AlbumTypes" Relationship="Self.FK_AlbumType_Band" FromRole="Band" ToRole="AlbumType" />
           <NavigationProperty Name="Genres" Relationship="Self.GenreBand" FromRole="Band" ToRole="Genre" />
-        </EntityType>
-        <EntityType Name="File">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FileName" Type="String" MaxLength="90" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FileSize" Type="Int64" />
-          <Property Name="FileType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FileRoot" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="FilePath" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="AlbumId" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageUrl" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
-          <Property Name="AuthorId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Album" Relationship="Self.FK_File_Album" FromRole="File" ToRole="Album" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_File_AspNetUsers" FromRole="File" ToRole="AspNetUsers" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
@@ -422,18 +405,6 @@
             </Principal>
             <Dependent Role="Album">
               <PropertyRef Name="AlbumTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_File_Album">
-          <End Role="Album" Type="Self.Album" Multiplicity="0..1" />
-          <End Role="File" Type="Self.File" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Album">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="File">
-              <PropertyRef Name="AlbumId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -477,18 +448,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_File_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
-          <End Role="File" Type="Self.File" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="File">
-              <PropertyRef Name="AuthorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="AspNetUserRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
@@ -505,15 +464,10 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="Bands" EntityType="Self.Band" />
-          <EntitySet Name="Files" EntityType="Self.File" />
           <EntitySet Name="Genres" EntityType="Self.Genre" />
           <AssociationSet Name="FK_Album_AlbumType" Association="Self.FK_Album_AlbumType">
             <End Role="AlbumType" EntitySet="AlbumTypes" />
             <End Role="Album" EntitySet="Albums" />
-          </AssociationSet>
-          <AssociationSet Name="FK_File_Album" Association="Self.FK_File_Album">
-            <End Role="Album" EntitySet="Albums" />
-            <End Role="File" EntitySet="Files" />
           </AssociationSet>
           <AssociationSet Name="FK_AlbumType_Band" Association="Self.FK_AlbumType_Band">
             <End Role="Band" EntitySet="Bands" />
@@ -527,10 +481,6 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
-          <AssociationSet Name="FK_File_AspNetUsers" Association="Self.FK_File_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="File" EntitySet="Files" />
-          </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -539,7 +489,58 @@
             <End Role="Band" EntitySet="Bands" />
             <End Role="Genre" EntitySet="Genres" />
           </AssociationSet>
+          <EntitySet Name="Files" EntityType="MusicUniModel.File" />
+          <AssociationSet Name="FK_File_Album" Association="MusicUniModel.FK_File_Album">
+            <End Role="Album" EntitySet="Albums" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
+          <AssociationSet Name="FK_File_AspNetUsers" Association="MusicUniModel.FK_File_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="90" FixedLength="false" Unicode="true" />
+          <Property Name="FileSize" Type="Int64" />
+          <Property Name="FileType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FileRoot" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="FilePath" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Album" Relationship="MusicUniModel.FK_File_Album" FromRole="File" ToRole="Album" />
+          <NavigationProperty Name="AspNetUser" Relationship="MusicUniModel.FK_File_AspNetUsers" FromRole="File" ToRole="AspNetUser" />
+        </EntityType>
+        <Association Name="FK_File_Album">
+          <End Type="MusicUniModel.Album" Role="Album" Multiplicity="0..1" />
+          <End Type="MusicUniModel.File" Role="File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Album">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="File">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_File_AspNetUsers">
+          <End Type="MusicUniModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="MusicUniModel.File" Role="File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="File">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -624,22 +625,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Files">
-            <EntityTypeMapping TypeName="MusicUniModel.File">
-              <MappingFragment StoreEntitySet="File">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
-                <ScalarProperty Name="FileType" ColumnName="FileType" />
-                <ScalarProperty Name="FileRoot" ColumnName="FileRoot" />
-                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
-                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Genres">
             <EntityTypeMapping TypeName="MusicUniModel.Genre">
               <MappingFragment StoreEntitySet="Genre">
@@ -664,6 +649,23 @@
               <ScalarProperty Name="Id" ColumnName="GenreId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Files">
+            <EntityTypeMapping TypeName="MusicUniModel.File">
+              <MappingFragment StoreEntitySet="File">
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileRoot" ColumnName="FileRoot" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
