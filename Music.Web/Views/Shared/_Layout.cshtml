@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+
+<html lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="M_Adnan">
+    <title>@ViewBag.Title</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Library/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="~/Library/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Library/css/ionicons.min.css" rel="stylesheet">
+    <link href="~/Library/css/main.css" rel="stylesheet">
+    <link href="~/Library/css/style.css" rel="stylesheet">
+    <link href="~/Library/css/responsive.css" rel="stylesheet">
+
+    <!-- JavaScripts -->
+    <script src="~/Library/js/modernizr.js"></script>
+
+    <!-- Online Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,100,700,900' rel='stylesheet' type='text/css'>
+</head>
+<body class="dark-layout">
+    <div id="wrap">
+        <!-- header -->
+        <header>
+            <div class="container">
+                <!-- Logo -->
+                <div class="logo"> <a href="index.html"><img class="img-responsive" src="images/logo-light.png" alt=""></a> </div>
+                <!-- Navigation -->
+                <nav class="navbar">
+                    <!-- NAV -->
+                    <ul class="nav ownmenu">
+                        <li class="active"> <a href="index.html">Home </a> </li>
+                        <li>
+                            <a href="index.html">Pages</a>
+                            <ul class="dropdown animated-3s fadeIn">
+                                <li> <a href="index.html">Index 1</a></li>
+                                <li> <a href="index-1.html">Index 2</a></li>
+                                <li> <a href="about.html">About</a></li>
+                                <li> <a href="media.html">Media</a></li>
+                                <li> <a href="music_01.html">Music</a></li>
+                                <li> <a href="news.html">News</a></li>
+                                <li> <a href="profile.html">Profile</a></li>
+                                <li> <a href="profile-light.html">Profile Light</a></li>
+                                <li> <a href="profile-song-list.html">Profile Song List</a></li>
+                                <li> <a href="search-page(artists).html">Artists</a></li>
+                            </ul>
+                        </li>
+                        <li> <a href="about.html">About</a> </li>
+                        <li> <a href="search-page(artists).html">Artists </a> </li>
+                        <li> <a href="news.html">Blog </a> </li>
+                        <li> <a href="register.html"> Sign Up</a> </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+
+        <!-- Content -->
+        <div id="content"> @RenderBody() </div>
+
+        <!--======= RIGHTS =========-->
+        <div class="rights">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            © Copyright 2016 Talento. All Rights Reserved<br>
+                            Made with <i class="fa fa-heart"></i> by UOU Apps
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="social_icons">
+                            <li><a href="#."><i class="fa fa-facebook"></i> </a></li>
+                            <li><a href="#."><i class="fa fa-twitter"></i> </a></li>
+                            <li><a href="#."><i class="fa fa-google"></i> </a></li>
+                            <li><a href="#."><i class="fa fa-soundcloud"></i> </a></li>
+                            <li><a href="#."><i class="fa fa-youtube"></i> </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Library/js/jquery-1.11.3.min.js"></script>
+    <script src="~/Library/js/bootstrap.min.js"></script>
+    <script src="~/Library/js/own-menu.js"></script>
+    <script src="~/Library/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/Library/js/jquery.isotope.min.js"></script>
+    <script src="~/Library/js/owl.carousel.min.js"></script>
+    <script src="~/Library/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Bnr Head -->
+<section class="bnr-head">
+    <div class="container">
+        <div class="position-center-center">
+            <h3>دانلود آهنگ </h3>
+            <p>
+               بهترین وب سایت برای جدید ترین آهنگ های ایرانی و خارجی
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Discover -->
+<section class="discover discover-style-2">
+    <div class="container">
+        <div class="main-heading">
+            <h3>جسجتو سبک موسیقی خود</h3>
+            <hr>
+        </div>
+
+        <!-- Center Circle -->
+        <div class="outer">
+            <div class="center-part">
+                <div class="position-center-center"> با سلیقه خود وارد شوید</div>
+            </div>
+
+            <!-- Bramds -->
+            <div class="discover-music">
+                <ul class="row">
+                    @foreach (var item in ViewBag.ListGenres)
+                    {
+                        <li class="col-sm-4">
+                            <a href="media.html">@item.Name</a>
+                            <img class="img-responsive" src="~/Library/images/dis-img-7.jpg" alt="">
+                        </li>
+                    }
+                   
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="portfolio port-wrap discover-music padding-top-80 padding-bottom-80 filter-index about-page">
+    <div class="container">
+
+        <!-- Work Filter -->
+        <ul class="tabs media-filter text-center">
+            <li><a class="active" href="#." data-filter="*">All</a></li>
+            <li><a href="#." data-filter=".multi">Multimedia</a></li>
+            <li><a href="#." data-filter=".audio">Music</a></li>
+            <li><a href="#." data-filter=".images">Video</a></li>
+            <li><a href="#." data-filter=".lyrics">Lyrics</a></li>
+            <li><a href="#." data-filter=".gal">Gallery</a></li>
+        </ul>
+
+        <!-- PORTFOLIO ITEMS -->
+        <div class="items row col-4">
+
+            <!-- MEDIA -->
+            <article class="media-item audio lyrics images">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-1.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>pop, electro, funk</span>
+                    <h6>Lupita Niyog</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio multi images gal">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-2.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>Country, pop</span>
+                    <h6>Alexa Niall</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio multi lyrics images">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-3.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>Worship, christian</span>
+                    <h6>Sang Mil Yuk</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio multi lyrics gal">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-4.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>Electro, dance</span>
+                    <h6>Jonathan Volk</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item  lyrics images gal">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-5.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>Rock, punk</span>
+                    <h6>Keri Peterson</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio multi  gal">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-6.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>Rock</span>
+                    <h6>The Mirrors</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio multi lyrics images">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-7.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>JAZZ</span>
+                    <h6>James Blake</h6>
+                </div>
+            </article>
+
+            <!-- MEDIA -->
+            <article class="media-item audio  lyrics images">
+                <div class="media-image"> <a href="#."> <img alt="" src="~/Library/images/img-8.jpg"> </a> </div>
+                <div class="media-overlay">
+                    <div class="position-center-center"> <a href="#." class="view-detail">View</a> </div>
+                </div>
+                <!-- Item Name -->
+                <div class="item-name">
+                    <span>POP</span>
+                    <h6>David Legend</h6>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Release -->
+<section class="latest-release">
+    <div class="container">
+        <div class="main-heading">
+            <h3>latest releases</h3>
+            <hr>
+        </div>
+
+        <!-- Latest Release -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <article>
+                    <img src="~/Library/images/relase-img-1.jpg" alt="">
+                    <div class="botm-text"> <span>MUSIC VIDEO</span> <a href="#.">Here Comes the Sun</a> </div>
+                </article>
+            </div>
+
+            <!-- Latest Release -->
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <article>
+                            <img src="~/Library/images/relase-img-2.jpg" alt="">
+                            <div class="botm-text"> <span>LYRICS</span> <a href="#.">Here Comes the Sun</a> </div>
+                        </article>
+                    </div>
+
+                    <!-- Latest Release -->
+                    <div class="col-md-6">
+                        <article>
+                            <img src="~/Library/images/relase-img-3.jpg" alt="">
+                            <div class="botm-text"> <span>Song</span> <a href="#.">Across the Universe</a> </div>
+                        </article>
+                    </div>
+
+                    <!-- Latest Release -->
+                    <div class="col-md-6">
+                        <article>
+                            <img src="~/Library/images/relase-img-4.jpg" alt="">
+                            <div class="botm-text"> <span>SONG</span> <a href="#.">Eterna</a> </div>
+                        </article>
+                    </div>
+
+                    <!-- Latest Release -->
+                    <div class="col-md-6">
+                        <article>
+                            <img src="~/Library/images/relase-img-5.jpg" alt="">
+                            <div class="botm-text"> <span>Music video</span> <a href="#.">Louder Than Words</a> </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
