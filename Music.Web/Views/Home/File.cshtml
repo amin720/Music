@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- MAIN BANNER -->
+<section class="sub-bnr">
+    <div class="position-center-center">
+        <div class="container">
+            <h2>آلبوم @ViewBag.NameAlbumType</h2>
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("AlbumType",new{bandId = ViewBag.IdAlbumType})">@ViewBag.NameAlbum </a></li>
+                <li class="active">آهنگ ها</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="portfolio port-wrap discover-music padding-top-80 padding-bottom-80 about-page">
+    <div class="container">
+
+        <!-- PORTFOLIO ITEMS -->
+        <div class="items row col-4">
+
+            @foreach (var item in ViewBag.ListFile)
+            {
+                <!-- MEDIA -->
+                <article class="media-item">
+                    @if (item.ImageUrl == null)
+                    {
+                        <div class="media-image">
+                            <a href="#."> <img alt="" src="~/Library/images/media-img-1.jpg"> </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="media-image">
+                            <a href="#."> <img alt="" src="@Url.Content(item.ImageUrl)" height="263px" width="220px"> </a>
+                        </div>
+                    }
+
+                    <div class="media-overlay">
+                        <div class="tag">
+                            <i class="fa fa-music"></i>
+                        </div>
+                        <div class="position-center-center">
+                            <a href="@Url.Action("Buy",new{Id = item.Id})" class="view-detail">دانلود</a>
+                        </div>
+                    </div>
+                    <!-- Item Name -->
+                    <div class="item-name">
+                        <h6>@item.FileName</h6>
+                    </div>
+                </article>
+            }
+
+        </div>
+    </div>
+</section>
+

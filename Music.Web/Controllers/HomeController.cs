@@ -70,31 +70,111 @@ namespace Music.Web.Controllers
 		{
 			var band = await _bandRepository.GetByIdAsync(bandId);
 
+			ViewBag.IdBand = bandId;
 			ViewBag.ImageBand = band.ImageUrl;
 			ViewBag.NameBand = band.Name;
 			ViewBag.DescriptionBand = band.Description;
-
-			ViewBag.ListAlbumType = await _albumTypeRepository.GetPageByBandAsync(1, 12, band.Name);
-			ViewBag.ListAlbum = await _albumRepository.GetPageByAlbumTypeAsync(1, 12, band.Name);
 
 			return View();
 		}
 
 		// GET: Profile
 		[HttpGet]
-		public async Task<ActionResult> Album(int bandId,int albumTypeId)
+		[Route("Profile/{bandId}")]
+		public async Task<ActionResult> AlbumType(int bandId)
 		{
 			var band = await _bandRepository.GetByIdAsync(bandId);
-			var albumType = await _albumTypeRepository.GetByIdAsync(albumTypeId);
 
+			ViewBag.IdBand = bandId;
 			ViewBag.ImageBand = band.ImageUrl;
 			ViewBag.NameBand = band.Name;
 			ViewBag.DescriptionBand = band.Description;
 
 			ViewBag.ListAlbumType = await _albumTypeRepository.GetPageByBandAsync(1, 12, band.Name);
-			ViewBag.ListAlbum = await _albumRepository.GetPageByAlbumTypeAsync(1, 12, band.Name);
 
 			return View();
+		}
+
+		// GET: Album
+		[HttpGet]
+		public async Task<ActionResult> Album(int? bandId, int? albumTypeId)
+		{
+			var albumType = await _albumTypeRepository.GetByIdAsync((int)albumTypeId);
+			var band = await _bandRepository.GetByIdAsync((int)bandId);
+
+			ViewBag.IdBand = bandId;
+			ViewBag.NameBand = band.Name;
+
+			ViewBag.IdAlbumType = albumTypeId;
+			ViewBag.ImageAlbumType = albumType.ImageUrl;
+			ViewBag.NameAlbumType = albumType.Name;
+			ViewBag.DescriptionAlbumType = albumType.Description;
+
+			ViewBag.ListAlbum = await _albumRepository.GetPageByAlbumTypeAsync(1, 12, albumType.Name);
+
+			return View();
+		}
+
+		// GET: File
+		[HttpGet]
+		public async Task<ActionResult> File(int albumId)
+		{
+			var album = await _albumRepository.GetByIdAsync(albumId);
+
+			ViewBag.IdAlbumType = album.AlbumTypeId;
+
+			ViewBag.ImageAlbum = album.ImageUrl;
+			ViewBag.NameAlbum = album.Name;
+			ViewBag.DescriptionAlbum = album.Description;
+
+			ViewBag.ListFile = await _fileRepository.GetPageByAlbumAsync(1, 12, album.Name);
+
+			return View();
+		}
+
+		// GET: Buy
+		[Route("/Buy/{id}")]
+		public async Task<ActionResult> Buy(int Id)
+		{
+			var model = await _fileRepository.GetByIdAsync(Id);
+			if (model.Price == 0 || model.Price == null)
+			{
+				TempData["Id"] = model.Id;
+				return RedirectToAction("Download", "Home");
+			}
+
+			return View(model: model);
+		}
+
+		// GET: Download
+		public async Task<FileResult> Download(int? Id)
+		{
+			var id = Id == 0 || Id == null ? (int)TempData["Id"] : Id;
+			var model = await _fileRepository.GetByIdAsync((int)id);
+
+			//byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath(model.FileRoot));
+			//string fileName = model.FileName;
+
+			string contentType = string.Empty;
+
+			if (model.FileRoot.Contains(".mp3"))
+			{
+				contentType = "application/mp3";
+			}
+
+			else if (model.FileRoot.Contains(".MP3"))
+			{
+				contentType = "application/MP3";
+			}
+			else
+			{
+				contentType = "application/wfa";
+			}
+
+			//return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+			//return File(fileBytes, contentType, fileName);
+			return new FilePathResult(Server.MapPath(model.FileRoot), contentType);
+
 		}
 	}
 }

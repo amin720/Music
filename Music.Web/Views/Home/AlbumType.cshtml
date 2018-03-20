@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "AlbumType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- MAIN BANNER -->
+<section class="main-bnr">
+    <div class="container">
+        <div class="media">
+            <div class="media-left">
+                <!-- Avatar -->
+                @if (ViewBag.ImageBand == null)
+                {
+                    <div class="avatar"> <img class="img-responsive" src="images/avatar.jpg" alt=""> </div>
+                }
+                else
+                {
+                    <div class="avatar"> <img class="img-responsive" src="@Url.Content(ViewBag.ImageBand)" alt="@ViewBag.NameBand"> </div>
+                }
+            </div>
+            <div class="media-body">
+                <h1>@ViewBag.NameBand</h1>
+                <p><i class="fa fa-microphone"></i> خواننده </p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Nav Bar Block -->
+<div class="container">
+    <div class="nav-bar-block">
+        <ul>
+            <li><a href="@Url.Action("Profile",new {bandId = ViewBag.IdBand})">پروفایل</a></li>
+            <li> <a class="active" href="@Url.Action("AlbumType",new {bandId = ViewBag.IdBand})">نوع آلبوم</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- About -->
+<section class="portfolio port-wrap  padding-top-80 padding-bottom-80 about-page">
+    <div class="container">
+
+        <!-- PORTFOLIO ITEMS -->
+        <div class="items row col-4">
+            
+            @foreach (var item in ViewBag.ListAlbumType)
+            {
+                <!-- MEDIA -->
+                <article class="media-item">
+                    @if (item.ImageUrl == null)
+                    {
+                        <div class="media-image"> <a href="@Url.Action("Album",new{bandId = ViewBag.IdBand,albumTypeId = item.Id})"> <img alt="@item.Name" src="~/Library/images/media-img-1.jpg"> </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="media-image"> <a href="@Url.Action("Album",new{albumTypeId = item.Id})"> <img alt="@item.Name" src="@Url.Content(item.ImageUrl)"> </a>
+                        </div>
+                    }
+                    
+                    <div class="media-overlay">
+                        <div class="position-center-center">
+                            <span><a href="#."><i class="fa fa-play"></i></a> <a href="#."><i class="fa fa-link"></i></a></span>
+                            <h3>
+                                <a href="@Url.Action("Album",new{bandId = ViewBag.IdBand,albumTypeId = item.Id})">
+                                   @item.Name
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                </article>
+            }
+
+            
+        </div>
+    </div>
+</section>

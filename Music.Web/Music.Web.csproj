@@ -881,6 +881,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Bands.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
+    <Content Include="Views\Home\AlbumType.cshtml" />
+    <Content Include="Views\Home\Album.cshtml" />
+    <Content Include="Views\Home\File.cshtml" />
+    <Content Include="Views\Home\Buy.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

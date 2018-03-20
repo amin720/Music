@@ -38,7 +38,7 @@
                     @foreach (var item in ViewBag.ListGenres)
                     {
                         <li class="col-sm-4">
-                            <a href="@Url.Action("BandWithGenre",new {genreId = item.Id})">@item.Name</a>
+                            <a href="@Url.Action("Bands",new {genreId = item.Id})">@item.Name</a>
                             <img class="img-responsive" src="~/Library/images/dis-img-7.jpg" alt="@item.Name">
                         </li>
                     }
