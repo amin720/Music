@@ -50,6 +50,14 @@ namespace Music.Web.Controllers
 			return View();
 		}
 
+		// GET: Home
+		public ActionResult FAQ()
+		{
+
+			return View();
+		}
+
+
 		// GET: Bands
 		[HttpGet]
 		[Route("Bands/{genreId}")]

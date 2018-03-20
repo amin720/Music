@@ -178,7 +178,7 @@ namespace Music.Web.Areas.Admin.Controllers
 			{
 				items.Add(new AdminMenuItem
 				{
-					Text = "Admin Home",
+					Text = "داشبرد",
 					Action = "index",
 					RouteInfo = new { controller = "admin", area = "admin" }
 				});
@@ -187,51 +187,51 @@ namespace Music.Web.Areas.Admin.Controllers
 				{
 					items.Add(new AdminMenuItem
 					{
-						Text = "Users",
+						Text = "کاربران",
 						Action = "index",
 						RouteInfo = new { controller = "user", area = "admin" }
 					});
 
 					items.Add(new AdminMenuItem()
 					{
-						Text = "Products",
+						Text = "آهنگ",
 						Action = "index",
-						RouteInfo = new { controller = "product", area = "admin" }
+						RouteInfo = new { controller = "Music", area = "admin" }
 					});
 				}
 				else
 				{
 					items.Add(new AdminMenuItem
 					{
-						Text = "Profile",
+						Text = "پروفایل",
 						Action = "edit",
 						RouteInfo = new { controller = "user", area = "admin", username = User.Identity.Name }
 					});
 				}
 
-				if (!User.IsInRole("author"))
-				{
-					items.Add(new AdminMenuItem
-					{
-						Text = "Tags",
-						Action = "index",
-						RouteInfo = new { controller = "tag", area = "admin" }
-					});
-				}
+				//if (!User.IsInRole("author"))
+				//{
+				//	items.Add(new AdminMenuItem
+				//	{
+				//		Text = "Tags",
+				//		Action = "index",
+				//		RouteInfo = new { controller = "tag", area = "admin" }
+				//	});
+				//}
 
-				items.Add(new AdminMenuItem
-				{
-					Text = "Posts",
-					Action = "index",
-					RouteInfo = new { controller = "product", area = "admin" }
-				});
+				//items.Add(new AdminMenuItem
+				//{
+				//	Text = "Posts",
+				//	Action = "index",
+				//	RouteInfo = new { controller = "product", area = "admin" }
+				//});
 
-				items.Add(new AdminMenuItem
-				{
-					Text = "Categories",
-					Action = "index",
-					RouteInfo = new { controller = "postcategory", area = "admin" }
-				});
+				//items.Add(new AdminMenuItem
+				//{
+				//	Text = "Categories",
+				//	Action = "index",
+				//	RouteInfo = new { controller = "postcategory", area = "admin" }
+				//});
 			}
 
 			return PartialView(items);

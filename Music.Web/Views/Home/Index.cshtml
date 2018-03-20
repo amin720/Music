@@ -39,7 +39,16 @@
                     {
                         <li class="col-sm-4">
                             <a href="@Url.Action("Bands",new {genreId = item.Id})">@item.Name</a>
-                            <img class="img-responsive" src="~/Library/images/dis-img-7.jpg" alt="@item.Name">
+                            <img src="~/Library/images/dis-img-7.jpg" alt="@item.Name">k
+                            @*@if (item.ImageUrl == null)
+                                {
+                                    <img src="~/Library/images/dis-img-7.jpg" alt="@item.Name">
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(item.ImageUrl)" alt="@item.Name">
+
+                                }*@
                         </li>
                     }
 
@@ -64,7 +73,15 @@
             {
                 <div class="col-md-6">
                     <article>
-                        <img src="~/Library/images/relase-img-1.jpg" alt="">
+                        @if (item.ImageUrl == null)
+                        {
+                            <img src="~/Library/images/relase-img-1.jpg" alt="">
+                        }
+                        else
+                        {
+                            <img src="@Url.Content(item.ImageUrl)" alt="">
+
+                        }
                         <div class="botm-text">
                             <span>MUSIC VIDEO</span> <a href="#.">@item.FileName</a>
                         </div>
@@ -82,7 +99,16 @@
                     {
                         <div class="col-md-6">
                             <article>
-                                <img src="~/Library/images/relase-img-2.jpg" alt="">
+                                @if (item.ImageUrl == null)
+                                {
+                                    <img src="~/Library/images/relase-img-2.jpg" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(item.ImageUrl)" alt="">
+
+                                }
+
                                 <div class="botm-text">
                                     <span>آهنگ</span> <a href="#.">@item.FileName</a>
                                 </div>

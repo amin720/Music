@@ -885,6 +885,7 @@
     <Content Include="Views\Home\Album.cshtml" />
     <Content Include="Views\Home\File.cshtml" />
     <Content Include="Views\Home\Buy.cshtml" />
+    <Content Include="Views\Home\FAQ.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
