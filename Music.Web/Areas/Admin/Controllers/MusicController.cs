@@ -531,7 +531,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (file != null)
 			{
-				model.Price = (long)file.Price;
+				if (file.Price != null) model.Price = (long) file.Price;
 				model.FileOldName = file.FileName;
 				model.FileRoot = file.FileRoot;
 				model.FileSize = file.FileSize;
