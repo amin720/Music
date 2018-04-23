@@ -8,6 +8,7 @@ namespace Music.Core.Interfaces
 	{
 		Task<File> GetByIdAsync(int id);
 		Task<File> GetByNameAsync(string fileName);
+		Task<File> GetByAlbumAsync(int albumId, string fileName);
 		Task<IEnumerable<File>> GetAllyAsync();
 		Task CreateAsync(File model);
 		Task EditAsync(int id, File updateItem);

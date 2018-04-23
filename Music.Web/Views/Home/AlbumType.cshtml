@@ -56,13 +56,13 @@
                     }
                     else
                     {
-                        <div class="media-image"> <a href="@Url.Action("Album",new{albumTypeId = item.Id})"> <img alt="@item.Name" src="@Url.Content(item.ImageUrl)"> </a>
+                        <div class="media-image"> <a href="@Url.Action("Album",new{albumTypeId = item.Id})"> <img alt="@item.Name" src="@Url.Content(item.ImageUrl)" style="width: 263px; height: 220px;"> </a>
                         </div>
                     }
                     
                     <div class="media-overlay">
                         <div class="position-center-center">
-                            <span><a href="#."><i class="fa fa-play"></i></a> <a href="#."><i class="fa fa-link"></i></a></span>
+                            <span><a href="@Url.Action("Album",new{bandId = ViewBag.IdBand,albumTypeId = item.Id})"><i class="fa fa-play"></i></a> <a href="@Url.Action("Album",new{bandId = ViewBag.IdBand,albumTypeId = item.Id})"><i class="fa fa-link"></i></a></span>
                             <h3>
                                 <a href="@Url.Action("Album",new{bandId = ViewBag.IdBand,albumTypeId = item.Id})">
                                    @item.Name

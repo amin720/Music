@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label" for="BandId">سبک موسیقی</label>
+                <label class="col-md-3 control-label" for="BandId">خواننده</label>
                 <div class="col-md-7">
                     <select id="BandId" name="BandId" class="select-select2" style="width: 100%;" data-placeholder="یک انتخاب..">
                         <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -107,7 +107,7 @@
                             <td id="Id"><a href="@Url.Action("Album", "Music", new {albumTypeId = child.Id})" data-toggle="tooltip" title="Select User" class="btn btn-effect-ripple btn-xs btn-info"><i class="fa fa-bitcoin"></i></a></td>
 
                             <td class="text-center">
-                                <a href="@Url.Action("AlbumType", "Music", new {bandId = child.Id,albumTypeName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                <a href="@Url.Action("AlbumType", "Music", new {bandId = child.BandId,albumTypeName = child.Name})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
                                 @using (Html.BeginForm("AlbumType", "Music", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()

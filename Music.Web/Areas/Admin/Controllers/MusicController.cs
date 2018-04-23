@@ -229,10 +229,30 @@ namespace Music.Web.Areas.Admin.Controllers
 					}
 					else
 					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + band.BandNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/Band"), myfile);
+								band.BandImage = "~/DownloadCenter/Band/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
 						bandCheck.Name = (band.BandOldName == band.BandNewName ? band.BandOldName : band.BandNewName);
 						bandCheck.Description = band.BandDescption;
-						bandCheck.ImageUrl = band.BandImage;
-						bandCheck.Genres.Add(genre);
+						bandCheck.ImageUrl = band.BandImage ?? bandCheck.ImageUrl;
+						if (genre != null)
+						{
+							bandCheck.Genres.Add(genre);
+						}
 
 						await _bandRepository.EditAsync(bandCheck.Id, bandCheck);
 					}
@@ -265,7 +285,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (!string.IsNullOrEmpty(albumTypeName))
 			{
-				albumType = await _albumTypeRepository.GetByNameAsync(albumTypeName);
+				albumType = await _albumTypeRepository.GetByBandAsync(bandId,albumTypeName);
 			}
 
 			var model = new MusicViewModel();
@@ -277,7 +297,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				model.AlbumTypeImage = albumType.ImageUrl;
 				model.BandId = bandId;
 
-				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+				model.AlbumTypes = await _albumTypeRepository.GetPageByBandAsync(1, 100, bandId);
 				model.Bands = await _bandRepository.GetAllyAsync();
 			}
 			else
@@ -297,7 +317,7 @@ namespace Music.Web.Areas.Admin.Controllers
 		{
 			var model = new MusicViewModel
 			{
-				AlbumTypes = await _albumTypeRepository.GetAllyAsync(),
+				AlbumTypes = await _albumTypeRepository.GetPageByBandAsync(1, 100, albumType.BandId),
 				Bands = await _bandRepository.GetAllyAsync()
 			};
 			var albumTypeCheck = new AlbumType();
@@ -316,7 +336,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					albumType.AlbumTypeOldName = albumType.AlbumTypeNewName;
 				}
 
-				albumTypeCheck = await _albumTypeRepository.GetByNameAsync(albumType.AlbumTypeOldName);
+				albumTypeCheck = await _albumTypeRepository.GetByBandAsync(albumType.BandId, albumType.AlbumTypeOldName);
 
 				if (albumType.ActionType == "create" || albumType.ActionType == "edit")
 				{
@@ -351,16 +371,34 @@ namespace Music.Web.Areas.Admin.Controllers
 
 						await _albumTypeRepository.CreateAsync(AlbumTypemodel);
 
-						model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+						model.AlbumTypes = await _albumTypeRepository.GetPageByBandAsync(1, 100, albumType.BandId);
 						model.BandId = albumType.BandId;
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
 						return View(model);
 					}
 					else
 					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + albumType.AlbumTypeNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/AlbumType"), myfile);
+								albumType.AlbumTypeImage = "~/DownloadCenter/AlbumType/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+
 						albumTypeCheck.Name = (albumType.AlbumTypeOldName == albumType.AlbumTypeNewName ? albumType.AlbumTypeOldName : albumType.AlbumTypeNewName);
 						albumTypeCheck.Description = albumType.AlbumTypeDescption;
-						albumTypeCheck.ImageUrl = albumType.AlbumTypeImage;
+						albumTypeCheck.ImageUrl = albumType.AlbumTypeImage ?? albumTypeCheck.ImageUrl;
 						albumTypeCheck.BandId = albumType.BandId;
 
 						await _albumTypeRepository.EditAsync(albumTypeCheck.Id, albumTypeCheck);
@@ -371,7 +409,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					await _albumTypeRepository.DeleteAsync(albumTypeCheck.Id);
 				}
 
-				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
+				model.AlbumTypes = await _albumTypeRepository.GetPageByBandAsync(1, 100, albumType.BandId);
 				model.BandId = albumType.BandId;
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
@@ -395,7 +433,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (!string.IsNullOrEmpty(albumName))
 			{
-				album = await _albumRepository.GetByNameAsync(albumName);
+				album = await _albumRepository.GetByAlbumTypeAsync(albumTypeId,albumName);
 			}
 
 			var model = new MusicViewModel();
@@ -407,7 +445,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				model.AlbumImage = album.ImageUrl;
 				model.AlbumTypeId = albumTypeId;
 
-				model.Albums = await _albumRepository.GetAllyAsync();
+				model.Albums = await _albumRepository.GetPageByAlbumTypeAsync(1, 100, albumTypeId);
 				model.AlbumTypes = await _albumTypeRepository.GetAllyAsync();
 			}
 			else
@@ -427,7 +465,7 @@ namespace Music.Web.Areas.Admin.Controllers
 		{
 			var model = new MusicViewModel
 			{
-				Albums = await _albumRepository.GetAllyAsync(),
+				Albums = await _albumRepository.GetPageByAlbumTypeAsync(1, 100, album.AlbumTypeId),
 				AlbumTypes = await _albumTypeRepository.GetAllyAsync()
 			};
 			var albumCheck = new Album();
@@ -446,7 +484,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					album.AlbumOldName = album.AlbumNewName;
 				}
 
-				albumCheck = await _albumRepository.GetByNameAsync(album.AlbumOldName);
+				albumCheck = await _albumRepository.GetByAlbumTypeAsync(album.AlbumTypeId,album.AlbumOldName);
 
 				if (album.ActionType == "create" || album.ActionType == "edit")
 				{
@@ -481,7 +519,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 						await _albumRepository.CreateAsync(albummodel);
 
-						model.Albums = await _albumRepository.GetAllyAsync();
+						model.Albums = await _albumRepository.GetPageByAlbumTypeAsync(1, 100, album.AlbumTypeId);
 						model.AlbumTypeId = album.AlbumTypeId;
 
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
@@ -489,9 +527,27 @@ namespace Music.Web.Areas.Admin.Controllers
 					}
 					else
 					{
+						if (file != null)
+						{
+							var fileName = Path.GetFileName(file.FileName);
+							var ext = Path.GetExtension(file.FileName);
+							if (allowedExtensions.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + album.AlbumNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/Album"), myfile);
+								album.AlbumImage = "~/DownloadCenter/Album/" + myfile;
+								file.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+
 						albumCheck.Name = (album.AlbumOldName == album.AlbumNewName ? album.AlbumOldName : album.AlbumNewName);
 						albumCheck.Description = album.AlbumDescption;
-						albumCheck.ImageUrl = album.AlbumImage;
+						albumCheck.ImageUrl = album.AlbumImage ?? albumCheck.ImageUrl;
 						albumCheck.AlbumTypeId = album.AlbumTypeId;
 
 						await _albumRepository.EditAsync(albumCheck.Id, albumCheck);
@@ -502,7 +558,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					await _albumRepository.DeleteAsync(albumCheck.Id);
 				}
 
-				model.Albums = await _albumRepository.GetAllyAsync();
+				model.Albums = await _albumRepository.GetPageByAlbumTypeAsync(1, 100, album.AlbumTypeId);
 				model.AlbumTypeId = album.AlbumTypeId;
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });
@@ -524,14 +580,14 @@ namespace Music.Web.Areas.Admin.Controllers
 
 			if (!string.IsNullOrEmpty(fileName))
 			{
-				file = await _fileRepository.GetByNameAsync(fileName);
+				file = await _fileRepository.GetByAlbumAsync(albumId,fileName);
 			}
 
 			var model = new MusicViewModel();
 
 			if (file != null)
 			{
-				if (file.Price != null) model.Price = (long) file.Price;
+				if (file.Price != null) model.Price = (long)file.Price;
 				model.FileOldName = file.FileName;
 				model.FileRoot = file.FileRoot;
 				model.FileSize = file.FileSize;
@@ -540,7 +596,7 @@ namespace Music.Web.Areas.Admin.Controllers
 				model.FileImage = file.ImageUrl;
 				model.AlbumId = albumId;
 
-				model.Files = await _fileRepository.GetAllyAsync();
+				model.Files = await _fileRepository.GetPageByAlbumAsync(1, 100, albumId);
 				model.Albums = await _albumRepository.GetAllyAsync();
 			}
 			else
@@ -560,7 +616,7 @@ namespace Music.Web.Areas.Admin.Controllers
 		{
 			var model = new MusicViewModel
 			{
-				Files = await _fileRepository.GetAllyAsync(),
+				Files = await _fileRepository.GetPageByAlbumAsync(1, 100, file.AlbumId),
 				Albums = await _albumRepository.GetAllyAsync()
 			};
 			var fileCheck = new Music.Core.Entities.File();
@@ -584,7 +640,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					file.FileOldName = file.FileNewName;
 				}
 
-				fileCheck = await _fileRepository.GetByNameAsync(file.FileOldName);
+				fileCheck = await _fileRepository.GetByAlbumAsync(file.AlbumId,file.FileOldName);
 
 				if (file.ActionType == "create" || file.ActionType == "edit")
 				{
@@ -646,7 +702,7 @@ namespace Music.Web.Areas.Admin.Controllers
 
 						await _fileRepository.CreateAsync(filemodel);
 
-						model.Files = await _fileRepository.GetAllyAsync();
+						model.Files = await _fileRepository.GetPageByAlbumAsync(1, 100, file.AlbumId);
 						model.AlbumId = file.AlbumId;
 
 						//return RedirectToAction("Section", new { surveyName = surveys.SurveyTitle });
@@ -654,14 +710,54 @@ namespace Music.Web.Areas.Admin.Controllers
 					}
 					else
 					{
+						if (image != null)
+						{
+							var fileName = Path.GetFileName(image.FileName);
+							var ext = Path.GetExtension(image.FileName);
+							if (allowedExtensionsImage.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + file.FileNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/File"), myfile);
+								file.FileImage = "~/DownloadCenter/File/" + myfile;
+								file.FileType = ext;
+								file.FileSize = music.ContentLength;
+								image.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Image file");
+							}
+						}
+						if (music != null)
+						{
+							var fileName = Path.GetFileName(music.FileName);
+							var ext = Path.GetExtension(music.FileName);
+							if (allowedExtensionsMusic.Contains(ext))
+							{
+								string name = Path.GetFileNameWithoutExtension(fileName);
+								string myfile = name + "_" + file.FileNewName + ext;
+								var path = Path.Combine(Server.MapPath("~/DownloadCenter/File"), myfile);
+								file.FileRoot = "~/DownloadCenter/File/" + myfile;
+								file.FileType = ext;
+								file.FileSize = music.ContentLength;
+
+								music.SaveAs(path);
+							}
+							else
+							{
+								ModelState.AddModelError(string.Empty, "Please choose only Music file");
+							}
+						}
+
 						fileCheck.Price = file.Price;
 						fileCheck.FileName = (file.FileOldName == file.FileNewName ? file.FileOldName : file.FileNewName);
-						fileCheck.FileRoot = file.FileRoot;
-						fileCheck.FilePath = file.FileRoot;
-						fileCheck.FileType = file.FileType;
-						fileCheck.FileSize = file.FileSize;
+						fileCheck.FileRoot = file.FileRoot ?? fileCheck.FileRoot;
+						fileCheck.FilePath = file.FileRoot ?? fileCheck.FileRoot;
+						fileCheck.FileType = file.FileType ?? fileCheck.FileType;
+						fileCheck.FileSize = file.FileSize ?? fileCheck.FileSize;
 						fileCheck.Description = file.FileDescption;
-						fileCheck.ImageUrl = file.FileImage;
+						fileCheck.ImageUrl = file.FileImage ?? fileCheck.ImageUrl;
 						fileCheck.AlbumId = file.AlbumId;
 						fileCheck.AuthorId = user.Id;
 
@@ -673,7 +769,7 @@ namespace Music.Web.Areas.Admin.Controllers
 					await _fileRepository.DeleteAsync(fileCheck.Id);
 				}
 
-				model.Files = await _fileRepository.GetAllyAsync();
+				model.Files = await _fileRepository.GetPageByAlbumAsync(1, 100, file.AlbumId);
 				model.AlbumId = file.AlbumId;
 
 				//return RedirectToAction("Section", new { surveyName = model.GenreOldName });

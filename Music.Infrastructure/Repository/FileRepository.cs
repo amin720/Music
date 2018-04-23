@@ -38,6 +38,17 @@ namespace Music.Infrastructure.Repository
 				return file;
 			}
 		}
+		public async Task<File> GetByAlbumAsync(int albumId, string fileName)
+		{
+			using (var db = new MusicUniEntities())
+			{
+				var file = await db.Files.SingleOrDefaultAsync(p => p.FileName == fileName && p.AlbumId == albumId);
+
+				
+
+				return file;
+			}
+		}
 		public async Task<IEnumerable<File>> GetAllyAsync()
 		{
 			using (var db = new MusicUniEntities())
@@ -53,7 +64,7 @@ namespace Music.Infrastructure.Repository
 			using (var db = new MusicUniEntities())
 			{
 				var file =
-					await db.Files.SingleOrDefaultAsync(pro => pro.FileName == model.FileName);
+					await db.Files.SingleOrDefaultAsync(pro => pro.FileName == model.FileName && pro.AlbumId == model.AlbumId);
 
 				if (file != null)
 				{
@@ -83,7 +94,7 @@ namespace Music.Infrastructure.Repository
 				file.FileType = updateItem.FileType;
 				file.Description = updateItem.Description;
 				file.ImageUrl = updateItem.ImageUrl;
-				file.Album = updateItem.Album;
+				file.AlbumId = updateItem.AlbumId;
 
 				await db.SaveChangesAsync();
 			}

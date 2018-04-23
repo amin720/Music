@@ -38,6 +38,14 @@ namespace Music.Infrastructure.Repository
 				return album;
 			}
 		}
+		public async Task<Album> GetByAlbumTypeAsync(int albumTypeId,string albumName)
+		{
+			using (var db = new MusicUniEntities())
+			{
+				var album = await db.Albums.SingleOrDefaultAsync(p => p.Name == albumName && p.AlbumTypeId == albumTypeId);
+				return album;
+			}
+		}
 		public async Task<IEnumerable<Album>> GetAllyAsync()
 		{
 			using (var db = new MusicUniEntities())
@@ -53,7 +61,7 @@ namespace Music.Infrastructure.Repository
 			using (var db = new MusicUniEntities())
 			{
 				var album =
-					await db.Albums.SingleOrDefaultAsync(pro => pro.Name == model.Name);
+					await db.Albums.SingleOrDefaultAsync(pro => pro.Name == model.Name && pro.AlbumTypeId == model.AlbumTypeId);
 
 				if (album != null)
 				{

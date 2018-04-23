@@ -117,7 +117,7 @@
                             <td class="text-center" id="Name"><strong>@child.FileName</strong></td>
 
                             <td class="text-center">
-                                <a href="@Url.Action("File", "Music", new {albumId= Model.AlbumId,fileName = child.FileName})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                <a href="@Url.Action("File", "Music", new {albumId= child.AlbumId,fileName = child.FileName})" data-toggle="tooltip" title="Edit User" class="btn btn-effect-ripple btn-xs btn-success"><i class="fa fa-pencil"></i></a>
                                 @using (Html.BeginForm("File", "Music", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()

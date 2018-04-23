@@ -11,6 +11,7 @@ namespace Music.Core.Interfaces
 	{
 		Task<AlbumType> GetByIdAsync(int id);
 		Task<AlbumType> GetByNameAsync(string name);
+		Task<AlbumType> GetByBandAsync(int bandId, string albumTypeName);
 		Task<IEnumerable<AlbumType>> GetAllyAsync();
 		Task CreateAsync(AlbumType model);
 		Task EditAsync(int id, AlbumType updateItem);

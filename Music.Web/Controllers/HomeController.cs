@@ -98,7 +98,7 @@ namespace Music.Web.Controllers
 			ViewBag.NameBand = band.Name;
 			ViewBag.DescriptionBand = band.Description;
 
-			ViewBag.ListAlbumType = await _albumTypeRepository.GetPageByBandAsync(1, 12, band.Name);
+			ViewBag.ListAlbumType = await _albumTypeRepository.GetPageByBandAsync(1, 12, bandId);
 
 			return View();
 		}
@@ -118,7 +118,7 @@ namespace Music.Web.Controllers
 			ViewBag.NameAlbumType = albumType.Name;
 			ViewBag.DescriptionAlbumType = albumType.Description;
 
-			ViewBag.ListAlbum = await _albumRepository.GetPageByAlbumTypeAsync(1, 12, albumType.Name);
+			ViewBag.ListAlbum = await _albumRepository.GetPageByAlbumTypeAsync(1, 12, (int) albumTypeId);
 
 			return View();
 		}
@@ -160,28 +160,28 @@ namespace Music.Web.Controllers
 			var id = Id == 0 || Id == null ? (int)TempData["Id"] : Id;
 			var model = await _fileRepository.GetByIdAsync((int)id);
 
-			//byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath(model.FileRoot));
-			//string fileName = model.FileName;
+			byte[] fileBytes = System.IO.File.ReadAllBytes(Server.MapPath(model.FileRoot));
+			string fileName = model.FileName + model.FileType;
 
-			string contentType = string.Empty;
+			//string contentType = string.Empty;
 
-			if (model.FileRoot.Contains(".mp3"))
-			{
-				contentType = "application/mp3";
-			}
+			//if (model.FileRoot.Contains(".mp3"))
+			//{
+			//	contentType = "application/mp3";
+			//}
 
-			else if (model.FileRoot.Contains(".MP3"))
-			{
-				contentType = "application/MP3";
-			}
-			else
-			{
-				contentType = "application/wfa";
-			}
+			//else if (model.FileRoot.Contains(".MP3"))
+			//{
+			//	contentType = "application/MP3";
+			//}
+			//else
+			//{
+			//	contentType = "application/wfa";
+			//}
 
-			//return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+			return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
 			//return File(fileBytes, contentType, fileName);
-			return new FilePathResult(Server.MapPath(model.FileRoot), contentType);
+			//return new FilePathResult(Server.MapPath(model.FileRoot), contentType);
 
 		}
 	}

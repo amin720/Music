@@ -39,7 +39,7 @@
                     {
                         <li class="col-sm-4">
                             <a href="@Url.Action("Bands",new {genreId = item.Id})">@item.Name</a>
-                            <img src="~/Library/images/dis-img-7.jpg" alt="@item.Name">k
+                            <img src="~/Library/images/genere.jpg" alt="@item.Name">
                             @*@if (item.ImageUrl == null)
                                 {
                                     <img src="~/Library/images/dis-img-7.jpg" alt="@item.Name">
@@ -83,7 +83,7 @@
 
                         }
                         <div class="botm-text">
-                            <span>MUSIC VIDEO</span> <a href="#.">@item.FileName</a>
+                            <span>آهنگ ویژه</span> <a href="#" style="height: 400px;">@item.FileName</a>
                         </div>
                     </article>
                 </div>
@@ -101,16 +101,16 @@
                             <article>
                                 @if (item.ImageUrl == null)
                                 {
-                                    <img src="~/Library/images/relase-img-2.jpg" alt="">
+                                    <img src="~/Library/images/relase-img-2.jpg" alt="" >
                                 }
                                 else
                                 {
-                                    <img src="@Url.Content(item.ImageUrl)" alt="">
+                                    <img src="@Url.Content(item.ImageUrl)" alt="" style="width: 300px; height: 276px;">
 
                                 }
 
                                 <div class="botm-text">
-                                    <span>آهنگ</span> <a href="#.">@item.FileName</a>
+                                    <span>آهنگ</span> <a href="#">@item.FileName</a>
                                 </div>
                             </article>
                         </div>

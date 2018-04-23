@@ -654,6 +654,7 @@
     <Content Include="Library\images\bg-3-dark.jpg" />
     <Content Include="Library\images\bg-3.jpg" />
     <Content Include="Library\images\cd-cover.png" />
+    <Content Include="Library\images\genere.jpg" />
     <Content Include="Library\images\dis-img-1.jpg" />
     <Content Include="Library\images\dis-img-2.jpg" />
     <Content Include="Library\images\dis-img-3.jpg" />
